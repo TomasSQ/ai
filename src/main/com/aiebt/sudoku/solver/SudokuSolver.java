@@ -14,7 +14,7 @@ public class SudokuSolver {
     }
 
     public Sudoku solve() {
-        SudokuProblem sudokuProblem = new SudokuProblem(this.sudoku);
+        SudokuProblem sudokuProblem = new SudokuProblem(sudoku);
         SudokuProblem solvedSudoku = backtrackingSearch.execute(sudokuProblem)
                 .orElseThrow(() -> new RuntimeException("Invalid sudoku"));
         return solvedSudoku.get();

@@ -41,9 +41,9 @@ class SudokuProblem implements Problem<CellWithPosition, Integer> {
 
     @Override
     @SuppressWarnings("unchecked")
-    public Optional<com.aiebt.sudoku.solver.SudokuProblem> defineVariable(CellWithPosition cellWithPosition, Integer value) {
+    public Optional<SudokuProblem> defineVariable(CellWithPosition cellWithPosition, Integer value) {
         return sudoku.setCell(cellWithPosition.row, cellWithPosition.col, value)
-                .map(com.aiebt.sudoku.solver.SudokuProblem::new);
+                .map(SudokuProblem::new);
     }
 
     public Sudoku get() {
