@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static java.util.function.Predicate.not;
 
@@ -27,7 +28,11 @@ public class States {
         if (hasStateWithUnassignedColor()) {
             return false;
         }
-        return states.stream().map(State::getColor).count() <= maxNumberOfColorsAllowed;
+        int colorsUsed = states.stream()
+                .map(State::getColor)
+                .collect(Collectors.toSet())
+                .size();
+        return colorsUsed <= maxNumberOfColorsAllowed;
     }
 
     State getNextUncoloredState() {

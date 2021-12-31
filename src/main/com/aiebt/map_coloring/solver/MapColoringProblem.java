@@ -40,4 +40,9 @@ public class MapColoringProblem implements Problem<State, Color> {
     public Country get() {
         return country;
     }
+
+    @Override
+    public String toString() {
+        return country.toString();
+    }
 }

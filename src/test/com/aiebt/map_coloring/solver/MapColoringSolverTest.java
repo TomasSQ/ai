@@ -12,5 +12,8 @@ class MapColoringSolverTest {
     public void canSolve() {
         Country coloredCountry = new MapColoringSolver(Fixtures.UNCOLORED_COUNTRY_1).execute();
         assertTrue(coloredCountry.isColored());
+
+        coloredCountry = new MapColoringSolver(Fixtures.UNCOLORED_COUNTRY_2).execute();
+        assertTrue(coloredCountry.isColored());
     }
 }
