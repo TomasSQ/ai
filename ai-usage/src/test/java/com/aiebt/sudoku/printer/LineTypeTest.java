@@ -3,7 +3,7 @@ package com.aiebt.sudoku.printer;
 import com.aiebt.sudoku.core.Sudoku;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class LineTypeTest {
 

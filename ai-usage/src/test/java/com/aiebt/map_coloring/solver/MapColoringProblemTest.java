@@ -6,7 +6,6 @@ import com.aiebt.map_coloring.core.Country;
 import com.aiebt.map_coloring.core.State;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
