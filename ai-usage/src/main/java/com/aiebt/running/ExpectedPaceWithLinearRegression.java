@@ -2,18 +2,24 @@ package com.aiebt.running;
 
 import com.aiebt.ai.linear_regression.LinearRegression;
 import com.aiebt.ai.linear_regression.core.OrderedPair;
+import com.aiebt.utils.plot.PlotAsImage;
 
+import java.awt.Color;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ExpectedPaceWithLinearRegression {
+
+    public static final Color RED = new Color(200, 45, 45);
+    public static final Color BLUE = new Color(45, 45, 200);
 
     public static void main(String[] args) {
         var distanceVersusPace = getDistanceVersusPaceTrainingData();
         var lr = new LinearRegression(BigDecimal.valueOf(0.001d), BigDecimal.valueOf(0.5));
-        var coefficients = lr.train(distanceVersusPace, 50_000, true);
+        var coefficients = lr.train(distanceVersusPace, 10_000, true);
         MathContext twoDecimals = new MathContext(2, RoundingMode.HALF_EVEN);
         System.out.println("y = " + coefficients.a1.round(twoDecimals) + " + (" + coefficients.a2.round(twoDecimals) + ")x");
         System.out.println("R2: " + lr.getCoefficientOfDetermination().round(twoDecimals) + "min/km");
@@ -21,6 +27,22 @@ public class ExpectedPaceWithLinearRegression {
         System.out.println("10k: " + lr.predict(BigDecimal.valueOf(10)).round(twoDecimals) + "min/km");
         System.out.println("Half Marathon: " + lr.predict(BigDecimal.valueOf(21.1)).round(twoDecimals) + "min/km");
         System.out.println("Marathon: " + lr.predict(BigDecimal.valueOf(42.2)).round(twoDecimals) + "min/km");
+
+        plot(distanceVersusPace, coefficients);
+    }
+
+    private static void plot(List<OrderedPair<BigDecimal>> distanceVersusPace, OrderedPair<BigDecimal> coefficients) {
+        List<OrderedPair<Double>> points = distanceVersusPace.stream()
+                .map(point -> OrderedPair.of(point.a1.doubleValue(), point.a2.doubleValue()))
+                .collect(Collectors.toList());
+
+        new PlotAsImage(480, 480)
+                .backgroundColor(Color.WHITE)
+                .withAxis()
+                .alwaysStartFromZero()
+                .addLine(coefficients.a1.doubleValue(), coefficients.a2.doubleValue(), RED)
+                .addPoints(points, BLUE)
+                .save("a.png");
     }
 
     private static List<OrderedPair<BigDecimal>> getDistanceVersusPaceTrainingData() {
