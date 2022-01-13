@@ -24,8 +24,8 @@ class Graphics {
                 -((maxCoordinate.a2 + minCoordinate.a2) / 2.0)
         );
         scale = OrderedPair.of(
-                (1.0 * width) / (Math.abs(maxCoordinate.a1) + Math.abs(minCoordinate.a1)),
-                (1.0 * height) / (Math.abs(maxCoordinate.a2) + Math.abs(minCoordinate.a2))
+                (1.0 * width) / (maxCoordinate.a1 - minCoordinate.a1),
+                (1.0 * height) / (maxCoordinate.a2 - minCoordinate.a2)
         );
 
         centralize(width, height);

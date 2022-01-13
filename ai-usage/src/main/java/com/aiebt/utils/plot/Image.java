@@ -22,6 +22,7 @@ class Image {
     private boolean alwaysStartFromZero;
     private OrderedPair<Double> minCoordinate;
     private OrderedPair<Double> maxCoordinate;
+    private OrderedPair<Double> axisPadding;
 
     private final List<Line> lines = new ArrayList<>();
     private final List<Point> points = new ArrayList<>();
@@ -38,6 +39,7 @@ class Image {
         //  V  y
         minCoordinate = OrderedPair.of(0.0, 0.0);
         maxCoordinate = OrderedPair.of(1.0 * width, 1.0 * height);
+        axisPadding = OrderedPair.of(0.0, 0.0);
     }
 
     void setBackgroundColor(Color backgroundColor) {
@@ -70,18 +72,25 @@ class Image {
         );
 
         if (alwaysStartFromZero) {
-            // TODO instead of hardcoded padding, make it depend on min/max coords;
-            double padding = 2.0;
-            minCoordinate = OrderedPair.of(Math.min(minCoordinate.a1, -padding), Math.min(minCoordinate.a2, -padding));
-            maxCoordinate = OrderedPair.of(maxCoordinate.a1 + padding, maxCoordinate.a2 + padding);
+            double minX = Math.min(minCoordinate.a1, 0.0);
+            double minY = Math.min(minCoordinate.a2, 0.0);
+            axisPadding = OrderedPair.of(
+                    (maxCoordinate.a1 - minX) * 0.05,
+                    (maxCoordinate.a2 - minY) * 0.05
+            );
+            minCoordinate = OrderedPair.of(minX - axisPadding.a1, minY - axisPadding.a2);
+            maxCoordinate = OrderedPair.of(maxCoordinate.a1 + axisPadding.a1, maxCoordinate.a2 + axisPadding.a2);
+        } else {
+            axisPadding = OrderedPair.of(
+                    (maxCoordinate.a1 - minCoordinate.a1) * 0.05,
+                    (maxCoordinate.a2 - minCoordinate.a2) * 0.05
+            );
+            minCoordinate = OrderedPair.of(minCoordinate.a1 - axisPadding.a1, minCoordinate.a2 - axisPadding.a2);
+            maxCoordinate = OrderedPair.of(maxCoordinate.a1 + axisPadding.a1, maxCoordinate.a2 + axisPadding.a2);
         }
-        // TODO make it work when it doesn't start form zero;
     }
 
     void save(String pathWithFilename) {
-        if (!alwaysStartFromZero) {
-            throw new IllegalStateException("Must always start from zero. Did you forget to call setAlwaysStartFromZero?");
-        }
         initGraphics();
         paintAxis();
         paintPoints();
@@ -103,8 +112,28 @@ class Image {
             return;
         }
         graphics.setColor(Color.GRAY);
-        graphics.drawLine(minCoordinate.a1, 0.0, maxCoordinate.a1, 0.0);
-        graphics.drawLine(0.0, minCoordinate.a2, 0.0, maxCoordinate.a2);
+        double x0 = 0.0;
+        double y0 = 0.0;
+        if (!alwaysStartFromZero) {
+            x0 = minCoordinate.a1 + axisPadding.a1 * 0.75;
+            y0 = minCoordinate.a2 + axisPadding.a2 * 0.75;
+        }
+
+        for (double x = x0; x < maxCoordinate.a1; x += axisPadding.a1) {
+            graphics.setColor(Color.LIGHT_GRAY);
+            graphics.drawLine(x, minCoordinate.a2, x, maxCoordinate.a2);
+            graphics.setColor(Color.GRAY);
+            graphics.drawLine(x, y0 - axisPadding.a2 * 0.1, x, y0 + axisPadding.a2 * 0.1);
+        }
+        for (double y = y0; y < maxCoordinate.a2; y += axisPadding.a2) {
+            graphics.setColor(Color.LIGHT_GRAY);
+            graphics.drawLine(minCoordinate.a1, y, maxCoordinate.a1, y);
+            graphics.setColor(Color.GRAY);
+            graphics.drawLine(x0 - axisPadding.a1 * 0.1, y, x0 + axisPadding.a1 * 0.1, y);
+        }
+
+        graphics.drawLine(minCoordinate.a1, y0, maxCoordinate.a1, y0);
+        graphics.drawLine(x0, minCoordinate.a2, x0, maxCoordinate.a2);
     }
 
     private void paintPoints() {
