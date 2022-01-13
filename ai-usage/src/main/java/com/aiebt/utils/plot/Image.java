@@ -1,6 +1,6 @@
 package com.aiebt.utils.plot;
 
-import com.aiebt.ai.linear_regression.core.OrderedPair;
+import com.aiebt.ai.regression.core.OrderedPair;
 
 import javax.imageio.ImageIO;
 import java.awt.Color;

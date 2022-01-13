@@ -1,4 +1,4 @@
-package com.aiebt.ai.linear_regression.core;
+package com.aiebt.ai.regression.core;
 
 import java.util.Objects;
 

@@ -1,6 +1,7 @@
-package com.aiebt.ai.linear_regression;
+package com.aiebt.ai.regression;
 
-import com.aiebt.ai.linear_regression.core.OrderedPair;
+import com.aiebt.ai.regression.core.OrderedPair;
+import com.aiebt.ai.regression.core.LinearRegression;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -50,11 +51,5 @@ class LinearRegressionTest {
 
         LinearRegression tooFewEpochs = new LinearRegression(BigDecimal.valueOf(0.001d), BigDecimal.valueOf(0.88));
         assertThrows(IllegalArgumentException.class, () -> tooFewEpochs.train(DATA_POINTS, 10));
-    }
-
-    @Test
-    void throwsWhenPredictBeforeTraining() {
-        LinearRegression linearRegression = new LinearRegression(BigDecimal.valueOf(0.001d), BigDecimal.valueOf(0.88));
-        assertThrows(IllegalStateException.class, () -> linearRegression.predict(BigDecimal.valueOf(0.2)));
     }
 }

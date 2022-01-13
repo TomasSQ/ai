@@ -1,7 +1,7 @@
 package com.aiebt.running;
 
-import com.aiebt.ai.linear_regression.LinearRegression;
-import com.aiebt.ai.linear_regression.core.OrderedPair;
+import com.aiebt.ai.regression.core.LinearRegression;
+import com.aiebt.ai.regression.core.OrderedPair;
 import com.aiebt.utils.plot.PlotAsImage;
 
 import java.awt.Color;
